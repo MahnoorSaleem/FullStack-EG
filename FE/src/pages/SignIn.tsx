@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../services/apiServices';
+import { useAuth } from '../context/AuthContext';
+import { ApiResponse, LoginResponse } from '../services/interfaces';
 
 type SignInFormInputs = {
   email: string;
@@ -10,17 +12,38 @@ type SignInFormInputs = {
 
 const SignIn: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<SignInFormInputs>();
+
+  const [errorMessage, setErrorMessage] = useState('');
+  
   const navigate = useNavigate();
+  
+  const { login: loginAuthUser } = useAuth();
 
   const onSubmit = async(data: SignInFormInputs) => {
-    console.log(data);
-    await loginUser(data);
-    navigate('/welcome');
+    try {
+      let response: any  = await loginUser(data);
+      console.log(response, 'res[ponsee');
+      if (response) {
+        const token = response.access_token;
+        loginAuthUser(token);
+        navigate('/welcome');
+    } else {
+        setErrorMessage(response.message || 'Login failed');
+    }
+    } catch (error) {
+      console.error('Error logging in:', error);
+      setErrorMessage('Failed to login. Please try again later.');
+    }
   };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
     <img src="/eg_logo_color.png" alt="Easygenerator Logo" className="h-16 mb-4" />
+    {errorMessage && (
+        <div className="w-full max-w-md bg-red-200 text-red-700 p-3 mb-4 border border-red-500 rounded-lg text-center">
+          {errorMessage}
+        </div>
+    )}
     <div className="w-full max-w-md bg-white p-8 border border-gray-300 rounded-lg">
       <h2 className="text-3xl font-bold mb-6 text-center">Sign In</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
