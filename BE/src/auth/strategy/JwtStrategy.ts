@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
-    this.logger.log('Validate passport:', payload, 'hui');
+    this.logger.log('Validate passport:');
     // issue here payload doesnot conatin email
     return await this.UserService.findOne({ email: payload.email });
   }

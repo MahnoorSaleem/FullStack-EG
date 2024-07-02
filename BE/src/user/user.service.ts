@@ -31,7 +31,7 @@ export class UserService {
   }
 
   async findOne(query: Partial<UserT>) {
-    this.logger.log('Finding user by Email', query);
+    this.logger.log('Finding user by Email');
     try {
       const user = await this.userModel
         .findOne(query)
