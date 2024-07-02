@@ -11,7 +11,7 @@ type SignInFormInputs = {
 };
 
 const SignIn: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<SignInFormInputs>();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<SignInFormInputs>();
 
   const [errorMessage, setErrorMessage] = useState('');
   
@@ -22,13 +22,14 @@ const SignIn: React.FC = () => {
   const onSubmit = async(data: SignInFormInputs) => {
     try {
       let response: any  = await loginUser(data);
-      console.log(response, 'res[ponsee');
-      if (response) {
-        const token = response.access_token;
+      const token = response.data?.access_token;
+      console.log(response);
+      if (response?.statusCode === 200 && token) {
         loginAuthUser(token);
         navigate('/welcome');
+        reset()
     } else {
-        setErrorMessage(response.message || 'Login failed');
+        setErrorMessage(response.data.message || 'Login failed');
     }
     } catch (error) {
       console.error('Error logging in:', error);

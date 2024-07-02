@@ -31,7 +31,7 @@ export class AuthController {
   @Get('viewProfile')
   async getUser(@Request() req): Promise<any> {  
     this.logger.log('View Profile Endpoint');
-    const {_id, name, password} = req.user
-    return new ResponseDTO(HttpStatus.OK, 'User Retrieved Successfully', {_id, name, password});
+    const {_id, name, email} = req.user
+    return new ResponseDTO(HttpStatus.OK, 'User Retrieved Successfully', {_id, name, email});
   }
 }

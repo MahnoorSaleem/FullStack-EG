@@ -11,7 +11,7 @@ type SignUpFormInputs = {
 };
 
 const SignUp: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormInputs>();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<SignUpFormInputs>();
   const [signUpSuccess, setSignUpSuccess] = useState(false);
   const [signupErrorMessage, setSignupErrorMessage] = useState<any>();
 
@@ -20,15 +20,15 @@ const SignUp: React.FC = () => {
   const onSubmit = async (userData: SignUpFormInputs) => {
     try {
       const response: any = await signupUser(userData);
-      console.log('respomse', response)
-      if (response) {
+      if (response.statusCode === 200 && response.data) {
         setSignUpSuccess(true);
-        setSignupErrorMessage("")
+        setSignupErrorMessage("");
+        reset();
         // navigate('/login');
-      } else {
-        console.error('Signup failed:', response.message || 'Unknown error');
+      }  else {
+        console.info('Signup failed:', response || 'Unknown error');
         setSignUpSuccess(false);
-        setSignupErrorMessage(response.message)
+        setSignupErrorMessage(response.data.message)
       }
     } catch (error) {
       console.error('Error signing up:', error);

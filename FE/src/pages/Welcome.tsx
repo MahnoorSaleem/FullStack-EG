@@ -28,10 +28,7 @@ const Welcome: React.FC = () => {
       {profile ? (
         <>
         <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-          <div>
-            <h1>Welcome, {profile.name}</h1>
-            <p>Email: {profile.email}</p>
-          </div>
+
             <div className="max-w-4xl w-full bg-white p-8 border border-gray-300 rounded-lg shadow-lg">
               <img
                 src="/eg_logo_color.png"
@@ -39,7 +36,7 @@ const Welcome: React.FC = () => {
                 className="h-16 mb-4 mx-auto"
               />
               <h1 className="text-3xl font-bold text-center mb-4">
-                Empower your team with Easygenerator
+              Welcome: {profile.name}: Empower your team with Easygenerator
               </h1>
               <p className="text-lg text-gray-700 mb-6 text-center">
                 Easygenerator empowers your team to create effective e-learning courses with ease.
