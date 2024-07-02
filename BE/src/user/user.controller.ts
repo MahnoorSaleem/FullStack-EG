@@ -1,6 +1,7 @@
-import { Controller, Post, Logger, ConflictException, Body } from '@nestjs/common';
+import { Controller, Post, Logger, ConflictException, Body, HttpStatus, HttpException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ResponseDTO } from 'src/dto/response.dto';
 
 @Controller('user')
 export class UserController {
@@ -15,12 +16,12 @@ export class UserController {
     try {
       const query = { email: newUser.email };
       const isUser = await this.userService.findOne(query);
-      if (isUser) throw new ConflictException('User Already Exist');
+      if (isUser) return new ResponseDTO(HttpStatus.OK, 'User Already Exist');
       const user = await this.userService.create(newUser);
       return user;
-    } catch (err) {
-      this.logger.error('Something went wrong in signup:', err);
-      throw err;
+    } catch (error) {
+      this.logger.error('Something went wrong in signup:', error);
+      throw new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, 'Something went wrong. Please Try Again!', {}, error.message)
     }
   }
 }
