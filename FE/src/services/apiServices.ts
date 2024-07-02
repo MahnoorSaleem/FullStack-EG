@@ -12,12 +12,21 @@ export async function signupUser(userData: SignupData): Promise<any> {
     }
 }
 
-export async function loginUser(userData: LoginData): Promise<any> {
+export async function loginUser(userData: LoginData): Promise<any | null> {
     try {
         const response = await axios.post<ApiResponse<LoginResponse>>(`${BASE_URL}auth/login`, userData);
         return response.data;
-    } catch (error) {
-        throw new Error('Failed to log in. Please check your credentials.');
+    } catch (error: any) {
+        console.log('Error in loginUser:', error);
+        
+        if (axios.isAxiosError(error)) {
+            if (error.response) {
+                throw error;
+            }
+        } else {
+            // Non-Axios error
+            throw new Error('An unknown error occurred');
+        }
     }
 }
 
