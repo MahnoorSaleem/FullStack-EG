@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Request, UseGuards, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Request, UseGuards, Logger, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth-guard';
 import { LocalAuthGuard } from './guards/local-auth-guard';
@@ -13,10 +13,10 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req): Promise<any> {
+  async login(@Body() req): Promise<any> {
     try {
       this.logger.log('Login Endpoint');
-      return await this.authService.generateJwtToken(req);
+      return await this.authService.generateJwtToken(req.body);
     } catch (error) {
       throw error;
     }
@@ -24,9 +24,10 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('viewProfile')
-  async getUser(@Request() req): Promise<any> {
-    console.log('profile', req)
+  async getUser(@Body() req): Promise<any> {
+    console.log('profile', req.body)
     this.logger.log('View Profile Endpoint');
-    return req.user;
+    // return req.user;
+     return req.body.user;
   }
 }
