@@ -20,11 +20,10 @@ export class AuthService {
     return user;
   }
 
-  async generateJwtToken({user}: any) {
+  async generateJwtToken(user: any) {
     const payload = {
       email: user.email
     };
-    console.log(user.email, 'llll')
     return {
       access_token: this.jwtService.sign(payload),
     };

@@ -26,7 +26,7 @@ export class UserService {
   async findOne(query: Partial<UserT>): Promise<User | null> {
     this.logger.log('Finding user by Email', query);
     try {
-        const user = await this.userModel.findOne(query).select('+password').exec();;
+        const user = await this.userModel.findOne(query).select(['-password', '-__v']).exec();
         return user;
     } catch (error) {
         this.logger.error('Error finding user:', error.message);

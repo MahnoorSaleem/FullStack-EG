@@ -13,10 +13,10 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body() req): Promise<any> {
+  async login(@Body() body: any): Promise<any> {
     try {
       this.logger.log('Login Endpoint');
-      return await this.authService.generateJwtToken(req.body);
+      return await this.authService.generateJwtToken(body);
     } catch (error) {
       throw error;
     }
@@ -24,10 +24,8 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('viewProfile')
-  async getUser(@Body() req): Promise<any> {
-    console.log('profile', req.body)
+  async getUser(@Request() req: any): Promise<any> {
     this.logger.log('View Profile Endpoint');
-    // return req.user;
-     return req.body.user;
+     return req.user;
   }
 }
