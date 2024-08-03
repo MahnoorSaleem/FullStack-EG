@@ -12,7 +12,10 @@ import { ThrottlerModule } from '@nestjs/throttler';
       ttl: 60000,
       limit: 10,
     }]),
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     MongooseModule.forRoot(process.env.DB_CONNECTION), 
     AuthModule,
     UserModule,
